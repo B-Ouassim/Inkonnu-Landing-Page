@@ -1,66 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion'; // Added motion for entry
+import React from 'react';
+import CustomCursor from './components/CustomCursor';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import LoadingScreen from './components/LoadingScreen';
-import CustomCursor from './components/MouseMove';
-import About from './components/About';
 import Projects from './components/Projects';
-import Contact from './components/Contact';
 import Gallery from './components/Gallery';
+import Contact from './components/Contact';
 
-const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Lock scroll during load
-  useEffect(() => {
-    if (isLoading) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-  }, [isLoading]);
-
+function App() {
   return (
-    <div className='bg-black min-h-screen selection:bg-[#32CD32] selection:text-black'>
-      
-      {/* 1. Custom Cursor - Should always be active once loading is done */}
-      {!isLoading && <CustomCursor />}
+    <div className="bg-black text-white selection:bg-[#32CD32] selection:text-black">
+      {/* 1. The Global Cursor (Must be at the top level) */}
+      <CustomCursor />
 
-      {/* 2. Loading Screen Logic */}
-      <AnimatePresence mode="wait">
-        {isLoading && (
-          <LoadingScreen key="loader" onFinished={() => setIsLoading(false)} />
-        )}
-      </AnimatePresence>
+      {/* 2. Navigation */}
+      <Navbar />
 
-      {/* 3. Main Site Content */}
-      <AnimatePresence>
-        {!isLoading && (
-          <motion.main
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
-          >
-            {/* Ambient Digital Noise Overlay (Optional Aesthetic) */}
-            <div className="fixed inset-0 pointer-events-none z-[50] opacity-[0.03] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-            
-            <Navbar />
-            
-            {/* Wrapping components in a container for consistent spacing */}
-            <div className="relative">
-              <Hero />
-              <About />
-              <Projects />
-              <Gallery />
-              <Contact />
-            </div>
-          </motion.main>
-        )}
-      </AnimatePresence>
-      
+      {/* 3. Main Content Sections */}
+      <main>
+        <Hero />
+        
+        {/* The Project Archive Slider */}
+        <Projects />
+        
+        {/* The Media Gallery */}
+        <Gallery />
+        
+        {/* The Final Transmission Section */}
+        <Contact />
+      </main>
+
+      {/* 4. Global System Overlays (Optional) */}
+      <div className="fixed bottom-4 left-4 z-50 pointer-events-none">
+        <span className="text-[#32CD32]/20 text-[8px] tracking-[0.3em] uppercase">
+          System_v4.0.2 // stable
+        </span>
+      </div>
     </div>
   );
-};
+}
 
 export default App;
